@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Energy Pulse — NYC Building Energy Visualisation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div id="ui">
+      <h1>Energy Pulse — NYC Building Energy</h1>
+      <div class="controls">
+        <label for="boroughSelect">Borough</label>
+        <select id="boroughSelect"></select>
+
+        <label for="typeSelect">Property Type</label>
+        <select id="typeSelect"></select>
+
+        <label for="yearSlider">Year</label>
+        <input id="yearSlider" type="range" min="2018" max="2024" step="1">
+        <span id="yearLabel"></span>
+
+        <button id="resetView">Reset View</button>
+      </div>
+
+      <div id="legend"></div>
+      <div id="infoBox">Click a building dot for details.</div>
+    </div>
+
+    <main id="canvasContainer"></main>
+
+    <!-- p5.js and p5.dom -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.dom.min.js"></script>
+    <script src="sketch.js"></script>
+  </body>
+</html>
