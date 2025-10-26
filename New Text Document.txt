@@ -1,0 +1,30 @@
+document.addEventListener('DOMContentLoaded', () => {
+  const onboarding = document.getElementById('onboarding');
+  const startBtn = document.getElementById('startBtn');
+  const boroughSelect = document.getElementById('boroughSelect');
+
+  // Check URL for borough param
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlBorough = urlParams.get('borough');
+  if (urlBorough) {
+    boroughSelect.value = urlBorough.toUpperCase();
+  }
+
+  startBtn.addEventListener('click', () => {
+    const selected = boroughSelect.value;
+    onboarding.style.display = 'none';
+
+    // Update URL to reflect borough selection (optional)
+    const newUrl = new URL(window.location);
+    if(selected !== "ALL"){
+      newUrl.searchParams.set('borough', selected);
+    } else {
+      newUrl.searchParams.delete('borough');
+    }
+    window.history.replaceState({}, '', newUrl);
+
+    // Update sketch global variable
+    window.SELECTED_BOROUGH = selected;
+    if(typeof applyFilters === "function") applyFilters();
+  });
+});

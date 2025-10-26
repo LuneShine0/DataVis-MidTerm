@@ -1,12 +1,78 @@
-*{box-sizing:border-box;font-family:Arial, Helvetica, sans-serif}
-body{margin:0;display:flex;height:100vh;overflow:hidden}
-#ui{width:320px;padding:16px;background:#0f1724;color:#e6eef8;overflow:auto}
-#ui h1{font-size:18px;margin:0 0 12px 0}
-.controls{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
-.controls label{font-size:13px;margin-top:4px}
-.controls select,input[type=range]{width:100%;padding:6px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:#0b1220;color:#e6eef8}
-#legend{margin-top:8px;font-size:13px}
-#infoBox{margin-top:12px;padding:8px;background:#071025;border-radius:6px}
-#canvasContainer{flex:1;background:#071427;display:flex;align-items:stretch;justify-content:center}
-canvas{max-width:100%;height:100%}
-.tooltip{position:absolute;padding:6px;background:#fff;color:#000;border-radius:4px;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.3);font-size:12px}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #071427;
+  color: #f0f0f0;
+}
+
+#ui {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+  background: rgba(0,0,0,0.7);
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.controls label {
+  display: block;
+  margin-top: 8px;
+}
+
+#legend, #infoBox {
+  margin-top: 12px;
+  font-size: 0.9em;
+}
+
+#canvasContainer {
+  width: 100vw;
+  height: 100vh;
+}
+
+.tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+/* === Onboarding Overlay === */
+#onboarding {
+  position: fixed;
+  top:0; left:0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+}
+
+.onboarding-content {
+  max-width: 600px;
+  padding: 24px;
+  background: #112144;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.onboarding-content h1, .onboarding-content h2 {
+  color: #ffd966;
+}
+
+.onboarding-content p {
+  margin-bottom: 16px;
+}
+
+.onboarding-content select, .onboarding-content button {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1em;
+}
