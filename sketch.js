@@ -9,10 +9,15 @@ let scaleFactor = 1;
 let offsetX=0, offsetY=0;
 let dragging=false, lastMouse;
 let canvas;
-let typeSelect, yearSlider, yearLabel, resetViewBtn;
+let typeSelect, yearSlider, yearLabel, resetViewBtn, animateBtn;
 let infoBox;
 let minYear=9999, maxYear=0;
 let typesList = ['All'];
+let animatingYears = false;
+let animationDirection = 1;
+let animationSpeed = 0.4; // smaller = slower, larger = faster
+let currentYearValue = 0;
+
 
 function preload(){
   table = loadTable('NYC_Building_Energy_and_Water_Data_Disclosure_for_Local_Law_84_(2022-Present)_20251020.csv', 'csv', 'header');
@@ -27,6 +32,7 @@ function setup(){
   yearSlider = select('#yearSlider');
   yearLabel = select('#yearLabel');
   resetViewBtn = select('#resetView');
+  animateBtn = select('#animateYears');
   infoBox = select('#infoBox');
 
   parseTable();
@@ -36,6 +42,7 @@ function setup(){
   yearSlider.input(() => { yearLabel.html(yearSlider.value()); applyFilters(); });
   typeSelect.changed(applyFilters);
   resetViewBtn.mousePressed(() => { resetView(); });
+  animateBtn.mousePressed(toggleYearAnimation);
 
   resetView();
 }
@@ -114,6 +121,7 @@ function applyFilters(){
 
 function draw(){
   background('#071427');
+  updateYearAnimation();
   push();
   translate(width/2 + offsetX, height/2 + offsetY);
   scale(scaleFactor);
@@ -255,20 +263,58 @@ function mouseWheel(e){
   return false; // prevent page scroll
 }
 
+function isMouseOverUI(){
+  const ui = document.querySelector('#ui');
+  const rect = ui.getBoundingClientRect();
+  return mouseX >= rect.left && mouseX <= rect.right &&
+         mouseY >= rect.top && mouseY <= rect.bottom;
+}
+
 function mousePressed(){
+  if (isMouseOverUI()) return;
   dragging = true;
   lastMouse = {x: mouseX, y: mouseY};
 }
 
 function mouseDragged(){
-  if (dragging){
-    offsetX += mouseX - lastMouse.x;
-    offsetY += mouseY - lastMouse.y;
-    lastMouse = {x: mouseX, y: mouseY};
-  }
+  if (!dragging) return;
+  offsetX += mouseX - lastMouse.x;
+  offsetY += mouseY - lastMouse.y;
+  lastMouse = {x: mouseX, y: mouseY};
 }
 
 function mouseReleased(){ dragging = false; }
+
+function toggleYearAnimation() {
+  animatingYears = !animatingYears;
+  if (animatingYears) {
+    animateBtn.html('Pause Animation');
+    currentYearValue = Number(yearSlider.value());
+  } else {
+    animateBtn.html('Play Animation');
+  }
+}
+
+function updateYearAnimation() {
+  if (!animatingYears) return;
+  
+  currentYearValue += animationDirection * animationSpeed * deltaTime / 60; 
+  // Reverse direction when reaching limits
+  if (currentYearValue >= maxYear) {
+    currentYearValue = maxYear;
+    animationDirection = -1;
+  } else if (currentYearValue <= minYear) {
+    currentYearValue = minYear;
+    animationDirection = 1;
+  }
+
+  const newYear = Math.round(currentYearValue);
+  if (newYear !== Number(yearSlider.value())) {
+    yearSlider.value(newYear);
+    yearLabel.html(newYear);
+    applyFilters();
+  }
+}
 
 function escapeHtml(str){
   return (str+'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m]));
